@@ -1,17 +1,29 @@
-const url = 'https://weather-by-api-ninjas.p.rapidapi.com/v1/weather?city=Seattle';
-const options = {
-	method: 'GET',
-	headers: {
-		'x-rapidapi-key': '9b2f6a56ecmsh7be1759689fb8b1p10b665jsn40e27e487e16',
-		'x-rapidapi-host': 'weather-by-api-ninjas.p.rapidapi.com'
-	}
-};
+const apiKey = "2e5a0731783bef2037314a09ad9a2465";
+const apiUrl = "https://api.openweathermap.org/data/2.5/weather";
 
-try {
-	const response = await fetch(url, options);
-	const result = await response.text();
-	console.log(result);
-} catch (error) {
-	console.error(error);
+const locationInput = document.getElementById("locationInput");
+const searchButton = document.getElementById("searchButton");
+const locationElement = document.getElementById("location");
+const temperatureElement = document.getElementById("temperature");
+const descriptionElement = document.getElementById("description");
+
+searchButton.addEventListener("click", () => {
+  const location = locationInput.value;
+  if (location) {
+    fetchWeather(location);
+  }
+});
+
+function fetchWeather(location) {
+  const url = `${apiUrl}?q=${location}&appid=${apiKey}&units=metric`;
+  fetch(url)
+    .then((response) => response.json())
+    .then((data) => {
+      locationElement.textContent = data.name;
+      temperatureElement.textContent = `${Math.round(data.main.temp)}°C`;
+      descriptionElement.textContent = data.weather[0].description;
+    })
+    .catch((error) => {
+      console.error("Error fetching weather data:", error);
+    });
 }
-

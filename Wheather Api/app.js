@@ -27,3 +27,4 @@ function fetchWeather(location) {
       console.error("Error fetching weather data:", error);
     });
 }
+
